@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0f766e">
+    <title>دنگی‌دنگی — نسخه آفلاین</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <style>
+    /* ============ دنگی‌دنگی — استایل نسخه آفلاین (موبایل‌فرست، RTL) ============ */
+    :root {
+        --bg: #f4f5f2;
+        --card: #ffffff;
+        --ink: #1f2937;
+        --muted: #6b7280;
+        --line: #e5e7eb;
+        --primary: #0f766e;
+        --primary-dark: #115e59;
+        --green: #15803d;
+        --green-bg: #dcfce7;
+        --red: #b91c1c;
+        --red-bg: #fee2e2;
+        --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { font-size: 16px; }
+    body {
+        margin: 0;
+        font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.7;
+    }
+    .container { max-width: 560px; margin: 0 auto; padding: 16px 16px 64px; }
+    h1 { font-size: 1.6rem; margin: 12px 0 4px; text-align: center; }
+    h2 { font-size: 1.25rem; margin: 0; }
+    h3 { font-size: 1rem; margin: 18px 0 8px; }
+    .subtitle { text-align: center; color: var(--muted); margin-top: 0; }
+    .badge-offline {
+        display: block; width: max-content; margin: 8px auto 0;
+        background: #fef3c7; color: #92400e;
+        font-size: .75rem; padding: 2px 12px; border-radius: 999px;
+    }
+    .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 14px;
+    }
+    .card-title { margin: 0 0 10px; }
+    .form { display: flex; flex-direction: column; gap: 12px; }
+    .form label { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; color: var(--muted); }
+    input, select {
+        font: inherit; padding: 10px 12px; border: 1px solid var(--line);
+        border-radius: 10px; background: #fff; color: var(--ink); width: 100%;
+    }
+    input:focus, select:focus { outline: 2px solid rgba(15,118,110,.35); border-color: var(--primary); }
+    fieldset { border: 1px solid var(--line); border-radius: 10px; margin: 0; }
+    legend { font-size: .82rem; color: var(--muted); padding: 0 6px; }
+    .weight-row { display: flex; align-items: center; gap: 10px; padding: 6px 2px; }
+    .weight-name { flex: 1; }
+    .weight-input { width: 90px; text-align: center; }
+    .btn {
+        font: inherit; border: 1px solid var(--line); background: var(--card);
+        color: var(--ink); padding: 10px 16px; border-radius: 10px; cursor: pointer;
+    }
+    .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 700; }
+    .btn.primary:active { background: var(--primary-dark); }
+    .btn.ghost { background: transparent; border-color: transparent; color: var(--muted); }
+    .btn.small { padding: 6px 10px; font-size: .85rem; }
+    .error {
+        color: var(--red); background: var(--red-bg);
+        padding: 8px 12px; border-radius: 10px; margin: 10px 0 0; font-size: .9rem;
+    }
+    .topbar {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 8px; margin-bottom: 12px;
+    }
+    .invite { margin: 2px 0 0; color: var(--muted); font-size: .8rem; }
+    .invite b { color: var(--primary); letter-spacing: 2px; }
+    .actions { display: flex; gap: 8px; margin: 12px 0; }
+    .actions .btn { flex: 1; }
+    .actions .btn.primary { flex: 1.4; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+        display: flex; flex-direction: column; gap: 2px; min-width: 96px;
+        border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px;
+        background: #fafafa; font-size: .85rem;
+    }
+    .chip .chip-name { color: var(--muted); }
+    .chip.creditor { background: var(--green-bg); border-color: transparent; }
+    .chip.creditor b { color: var(--green); }
+    .chip.debtor { background: var(--red-bg); border-color: transparent; }
+    .chip.debtor b { color: var(--red); }
+    .member-chip {
+        display: inline-flex; align-items: center; gap: 6px;
+        border: 1px solid var(--line); border-radius: 999px;
+        padding: 4px 6px 4px 10px; background: #fafafa; font-size: .85rem;
+    }
+    .chip-x {
+        border: none; background: transparent; color: var(--muted);
+        font-size: 1rem; line-height: 1; cursor: pointer; padding: 2px 6px; border-radius: 999px;
+    }
+    .chip-x:active { background: var(--red-bg); color: var(--red); }
+    .add-member { display: flex; gap: 8px; margin-top: 10px; }
+    .add-member input { flex: 1; }
+    .expense-list {
+        list-style: none; margin: 8px 0 0; padding: 0;
+        display: flex; flex-direction: column; gap: 8px;
+    }
+    .expense-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .expense-title { font-weight: 700; }
+    .expense-amount { font-weight: 700; color: var(--primary); white-space: nowrap; }
+    .expense-meta { color: var(--muted); font-size: .8rem; margin-top: 2px; }
+    .expense-shares {
+        color: var(--muted); font-size: .8rem; margin-top: 6px;
+        border-top: 1px dashed var(--line); padding-top: 6px;
+    }
+    .empty { color: var(--muted); font-size: .9rem; }
+    .split-preview { color: var(--muted); font-size: .85rem; margin: 0; }
+    .hint { color: var(--muted); font-size: .78rem; margin: 14px 2px 0; }
+    .report-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    .report-table th, .report-table td { padding: 8px 6px; text-align: right; border-bottom: 1px solid var(--line); }
+    .report-table th { color: var(--muted); font-weight: 500; font-size: .8rem; }
+    .creditor { color: var(--green); font-weight: 700; }
+    .debtor { color: var(--red); font-weight: 700; }
+    .settle-card { margin-top: 12px; }
+    #settlement-list { padding-right: 18px; margin: 8px 0 0; }
+    #settlement-list li { margin-bottom: 6px; }
+    .backup-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .backup-actions .btn { flex: 1; font-size: .85rem; }
+    .restore-card { margin-top: 14px; text-align: center; color: var(--muted); font-size: .85rem; }
+    .restore-card p { margin: 0 0 8px; }
+    #toast {
+        position: fixed; bottom: 18px; left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #111827; color: #fff; padding: 8px 18px; border-radius: 999px;
+        font-size: .85rem; opacity: 0; pointer-events: none; transition: all .25s;
+        max-width: 90vw; z-index: 10;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+
+<main class="container">
+
+    <!-- ========== نمای ۱: ساخت خونه (نسخه آفلاین) ========== -->
+    <section id="view-setup" class="view" hidden>
+        <h1>دنگی‌دنگی</h1>
+        <p class="subtitle">مدیریت خرج مشترک خونه</p>
+        <span class="badge-offline">نسخه‌ی آفلاین تست — داده‌ها فقط روی همین دستگاه</span>
+
+        <form id="form-setup" class="card form" style="margin-top:14px">
+            <label>اسم خونه
+                <input name="house_name" required maxlength="50" placeholder="مثلاً: خونه‌ی بچه‌ها">
+            </label>
+            <label>اسم خودت
+                <input name="member_name" required maxlength="50" placeholder="مثلاً: سارا">
+            </label>
+            <button class="btn primary" type="submit">ساخت خونه</button>
+        </form>
+
+        <div class="card restore-card">
+            <p>قبلاً پشتیبان گرفتی؟</p>
+            <button type="button" id="btn-restore-setup" class="btn small">بازگردانی از فایل پشتیبان</button>
+        </div>
+
+        <p id="setup-error" class="error" hidden></p>
+    </section>
+
+    <!-- ========== نمای ۲: صفحه اصلی ========== -->
+    <section id="view-home" class="view" hidden>
+        <header class="topbar">
+            <div>
+                <h2 id="house-name"></h2>
+                <p class="invite">کد خونه: <b id="house-code"></b> (در نسخه‌ی آفلاین فقط نمایشیه)</p>
+            </div>
+            <button type="button" id="btn-reset" class="btn ghost small">شروع دوباره</button>
+        </header>
+
+        <section class="card">
+            <h3 class="card-title">اعضا</h3>
+            <div id="member-chips" class="chips"></div>
+            <form id="form-add-member" class="add-member">
+                <input id="new-member-name" placeholder="اسم عضو جدید" maxlength="50">
+                <button class="btn small" type="submit">افزودن</button>
+            </form>
+        </section>
+
+        <section class="card" style="margin-top:10px">
+            <h3 class="card-title">تراز اعضا</h3>
+            <div id="balances-strip" class="chips"></div>
+        </section>
+
+        <div class="actions">
+            <button type="button" id="btn-open-add" class="btn primary">+ ثبت هزینه</button>
+            <button type="button" id="btn-open-report" class="btn">گزارش و تسویه</button>
+        </div>
+
+        <h3>هزینه‌ها</h3>
+        <ul id="expense-list" class="expense-list"></ul>
+        <p id="expense-empty" class="empty" hidden>هنوز هزینه‌ای ثبت نشده.</p>
+
+        <p class="hint">این نسخه آفلاین است: داده‌ها فقط روی همین دستگاه ذخیره می‌شوند و همگام‌سازی بین گوشی‌ها ندارد. برای امنیت، گاهی از صفحه‌ی گزارش پشتیبان بگیر.</p>
+    </section>
+
+    <!-- ========== نمای ۳: ثبت هزینه ========== -->
+    <section id="view-add" class="view" hidden>
+        <header class="topbar">
+            <h2>ثبت هزینه</h2>
+            <button type="button" id="btn-add-back" class="btn ghost small">بازگشت</button>
+        </header>
+
+        <form id="form-expense" class="card form">
+            <label>نام کالا
+                <input name="title" required maxlength="100" placeholder="مثلاً: خرید سوپرمارکت">
+            </label>
+            <label>مبلغ (تومان)
+                <input name="amount" required inputmode="numeric" maxlength="15" placeholder="مثلاً: 450000">
+            </label>
+            <label>پرداخت‌کننده
+                <select name="payer_member_id" id="payer-select"></select>
+            </label>
+
+            <fieldset>
+                <legend>ضریب سهم هر عضو (۰ = سهیم نیست، ۱ = سهم کامل، بیشتر = سهم بیشتر)</legend>
+                <div id="weights-list"></div>
+            </fieldset>
+
+            <p id="split-preview" class="split-preview">برای دیدن سهم هر نفر، مبلغ را وارد کنید.</p>
+            <button class="btn primary" type="submit">ثبت هزینه</button>
+            <p id="expense-error" class="error" hidden></p>
+        </form>
+    </section>
+
+    <!-- ========== نمای ۴: گزارش و تسویه ========== -->
+    <section id="view-report" class="view" hidden>
+        <header class="topbar">
+            <h2>گزارش و تسویه</h2>
+            <button type="button" id="btn-report-back" class="btn ghost small">بازگشت</button>
+        </header>
+
+        <section class="card">
+            <h3 class="card-title">تراز اعضا</h3>
+            <table class="report-table">
+                <thead>
+                    <tr><th>عضو</th><th>پرداختی</th><th>سهم</th><th>تراز</th></tr>
+                </thead>
+                <tbody id="report-balances"></tbody>
+            </table>
+        </section>
+
+        <section class="card settle-card">
+            <h3 class="card-title">تسویه پیشنهادی</h3>
+            <ol id="settlement-list"></ol>
+            <p id="settlement-empty" class="empty" hidden>همه‌ی ترازها صفر است؛ چیزی برای تسویه نیست.</p>
+        </section>
+
+        <div class="backup-actions">
+            <button type="button" id="btn-backup" class="btn small">پشتیبان‌گیری (دانلود فایل)</button>
+            <button type="button" id="btn-restore" class="btn small">بازگردانی پشتیبان</button>
+        </div>
+    </section>
+
+</main>
+
+<input type="file" id="file-restore" accept=".json,application/json" hidden>
+<div id="toast" role="status"></div>
+
+<script>
+/* =============================================================
+   دنگی‌دنگی — نسخه‌ی آفلاین (تک‌فایل، بدون سرور)
+   ذخیره‌سازی: localStorage مرورگر — داده فقط روی همین دستگاه
+   ============================================================= */
+(function () {
+    'use strict';
+
+    var STORAGE_KEY = 'dangidongi_offline_v1';
+    var state = null;
+    var toastTimer = null;
+
+    function $(sel) { return document.querySelector(sel); }
+
+    /* ------------------------------ ابزارها ------------------------------ */
+
+    function toEnglishDigits(s) {
+        return String(s)
+            .replace(/[۰-۹]/g, function (c) { return String('۰۱۲۳۴۵۶۷۸۹'.indexOf(c)); })
+            .replace(/[٠-٩]/g, function (c) { return String('٠١٢٣٤٥٦٧٨٩'.indexOf(c)); });
+    }
+
+    function parseAmount(raw) {
+        var s = toEnglishDigits(raw).replace(/[^0-9]/g, '');
+        if (s === '' || s.length > 15) return null;
+        var n = parseInt(s, 10);
+        return (isFinite(n) && n > 0) ? n : null;
+    }
+
+    function fmtNum(n) { return Number(n).toLocaleString('fa-IR'); }
+    function fmtToman(n) { return fmtNum(n) + ' تومان'; }
+    function fmtSigned(n) { return (n > 0 ? '+' : '') + fmtNum(n); }
+
+    var dateFormatter = null, timeFormatter = null;
+    try {
+        dateFormatter = new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
+        timeFormatter = new Intl.DateTimeFormat('fa-IR', { hour: '2-digit', minute: '2-digit' });
+    } catch (e) { dateFormatter = null; }
+
+    function fmtWhen(iso) {
+        if (!dateFormatter) return '';
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return '';
+        var s = dateFormatter.format(d);
+        if (timeFormatter) s += '، ساعت ' + timeFormatter.format(d);
+        return s;
+    }
+
+    /** تقسیم مبلغ: کف برای همه، باقی‌مانده به اولین عضو با ضریب مثبت. */
+    function splitAmount(amount, orderedWeights) {
+        var total = 0;
+        orderedWeights.forEach(function (w) { total += w.weight; });
+        if (total <= 0) return null;
+        var remainder = amount;
+        var shares = orderedWeights.map(function (w) {
+            var s = Math.floor((amount * w.weight) / total);
+            remainder -= s;
+            return { id: w.id, weight: w.weight, share: s };
+        });
+        for (var i = 0; i < shares.length; i++) {
+            if (shares[i].weight > 0) {
+                shares[i].share += remainder;
+                break;
+            }
+        }
+        return shares;
+    }
+
+    function toast(msg) {
+        var el = $('#toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2500);
+    }
+
+    function showError(el, msg) { el.textContent = msg; el.hidden = false; }
+    function hideError(el) { el.hidden = true; }
+
+    /* ------------------------------ ذخیره‌سازی ------------------------------ */
+
+    function loadState() {
+        try {
+            var d = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            if (d && d.house && Array.isArray(d.members) && Array.isArray(d.expenses)) return d;
+        } catch (e) { /* ignore */ }
+        return null;
+    }
+
+    function saveState() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+            toast('ذخیره‌سازی در مرورگر ممکن نشد!');
+        }
+    }
+
+    function generateCode() {
+        var a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', c = '';
+        for (var i = 0; i < 6; i++) c += a[Math.floor(Math.random() * a.length)];
+        return c;
+    }
+
+    /* ------------------------------ محاسبات ------------------------------ */
+
+    function computeBalances() {
+        var paid = {}, share = {};
+        state.members.forEach(function (m) { paid[m.id] = 0; share[m.id] = 0; });
+        state.expenses.forEach(function (e) {
+            paid[e.payer_id] = (paid[e.payer_id] || 0) + e.amount;
+            Object.keys(e.shares || {}).forEach(function (k) {
+                share[Number(k)] = (share[Number(k)] || 0) + e.shares[k];
+            });
+        });
+        return state.members.map(function (m) {
+            return {
+                id: m.id, name: m.name,
+                paid: paid[m.id] || 0,
+                share: share[m.id] || 0,
+                balance: (paid[m.id] || 0) - (share[m.id] || 0)
+            };
+        });
+    }
+
+    function memberName(id) {
+        for (var i = 0; i < state.members.length; i++) {
+            if (state.members[i].id === Number(id)) return state.members[i].name;
+        }
+        return '؟';
+    }
+
+    /** بزرگ‌ترین بدهکار به بزرگ‌ترین طلبکار، به اندازه‌ی کمینه‌ی این دو. */
+    function suggestSettlement(balances) {
+        var creditors = [], debtors = [];
+        balances.forEach(function (b) {
+            if (b.balance > 0) creditors.push({ id: b.id, val: b.balance });
+            else if (b.balance < 0) debtors.push({ id: b.id, val: -b.balance });
+        });
+        var transfers = [];
+        while (creditors.length && debtors.length) {
+            creditors.sort(function (a, b) { return b.val - a.val; });
+            debtors.sort(function (a, b) { return b.val - a.val; });
+            var c = creditors[0], d = debtors[0];
+            var amt = Math.min(c.val, d.val);
+            transfers.push({ from: d.id, to: c.id, amount: amt });
+            c.val -= amt; d.val -= amt;
+            if (c.val === 0) creditors.shift();
+            if (d.val === 0) debtors.shift();
+        }
+        return transfers;
+    }
+
+    /* ------------------------------ نماها ------------------------------ */
+
+    function showView(name) {
+        ['setup', 'home', 'add', 'report'].forEach(function (v) {
+            $('#view-' + v).hidden = (v !== name);
+        });
+        window.scrollTo(0, 0);
+    }
+
+    function enterApp() {
+        renderHouseHeader();
+        renderMembers();
+        renderBalancesStrip();
+        renderExpenseList();
+        showView('home');
+    }
+
+    function renderHouseHeader() {
+        $('#house-name').textContent = state.house.name;
+        $('#house-code').textContent = state.house.code;
+    }
+
+    /* ------------------------------ اعضا ------------------------------ */
+
+    function renderMembers() {
+        var box = $('#member-chips');
+        box.textContent = '';
+        state.members.forEach(function (m) {
+            var chip = document.createElement('span');
+            chip.className = 'member-chip';
+            var nm = document.createElement('span');
+            nm.textContent = m.name + (m.id === state.me_id ? ' (شما)' : '');
+            var x = document.createElement('button');
+            x.type = 'button';
+            x.className = 'chip-x';
+            x.textContent = '×';
+            x.dataset.id = m.id;
+            x.title = 'حذف عضو';
+            chip.appendChild(nm);
+            chip.appendChild(x);
+            box.appendChild(chip);
+        });
+    }
+
+    $('#member-chips').addEventListener('click', function (ev) {
+        var btn = ev.target.closest('.chip-x');
+        if (!btn) return;
+        var id = Number(btn.dataset.id);
+        if (state.members.length <= 1) { toast('حداقل یک عضو لازم است.'); return; }
+        var used = state.expenses.some(function (e) {
+            return e.payer_id === id ||
+                (e.weights && e.weights[id] !== undefined) ||
+                (e.shares && (e.shares[id] || 0) !== 0);
+        });
+        if (used) { toast('این عضو در هزینه‌ها نقش دارد و حذف نمی‌شود.'); return; }
+        if (!confirm('عضو «' + memberName(id) + '» حذف بشه؟')) return;
+        state.members = state.members.filter(function (m) { return m.id !== id; });
+        saveState();
+        renderMembers();
+        renderBalancesStrip();
+        toast('عضو حذف شد.');
+    });
+
+    $('#form-add-member').addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var name = $('#new-member-name').value.trim();
+        if (!name || name.length > 50) { toast('اسم عضو را وارد کنید (حداکثر ۵۰ حرف).'); return; }
+        state.seq.member += 1;
+        state.members.push({ id: state.seq.member, name: name, created_at: new Date().toISOString() });
+        this.reset();
+        saveState();
+        renderMembers();
+        renderBalancesStrip();
+    });
+
+    /* ------------------------------ تراز و لیست هزینه ------------------------------ */
+
+    function renderBalancesStrip() {
+        var box = $('#balances-strip');
+        box.textContent = '';
+        computeBalances().forEach(function (b) {
+            var chip = document.createElement('div');
+            chip.className = 'chip' + (b.balance > 0 ? ' creditor' : b.balance < 0 ? ' debtor' : '');
+            var name = document.createElement('span');
+            name.className = 'chip-name';
+            name.textContent = b.name;
+            var val = document.createElement('b');
+            val.textContent = fmtSigned(b.balance);
+            chip.appendChild(name);
+            chip.appendChild(val);
+            box.appendChild(chip);
+        });
+    }
+
+    function renderExpenseList() {
+        var list = $('#expense-list');
+        list.textContent = '';
+        var expenses = state.expenses.slice().reverse();
+        $('#expense-empty').hidden = expenses.length > 0;
+
+        expenses.forEach(function (e) {
+            var li = document.createElement('li');
+            li.className = 'expense card';
+
+            var head = document.createElement('div');
+            head.className = 'expense-head';
+            var title = document.createElement('span');
+            title.className = 'expense-title';
+            title.textContent = e.title;
+            var amount = document.createElement('span');
+            amount.className = 'expense-amount';
+            amount.textContent = fmtToman(e.amount);
+            head.appendChild(title);
+            head.appendChild(amount);
+
+            var meta = document.createElement('div');
+            meta.className = 'expense-meta';
+            meta.textContent = 'پرداخت: ' + memberName(e.payer_id) + ' · ' + fmtWhen(e.created_at);
+            li.appendChild(head);
+            li.appendChild(meta);
+
+            var parts = [];
+            state.members.forEach(function (m) {
+                var w = e.weights ? (e.weights[m.id] || 0) : 0;
+                if (w > 0) {
+                    var label = m.name;
+                    if (w > 1) label += ' ×' + fmtNum(w);
+                    label += ' ' + fmtNum((e.shares && e.shares[m.id]) || 0);
+                    parts.push(label);
+                }
+            });
+            if (parts.length) {
+                var shares = document.createElement('div');
+                shares.className = 'expense-shares';
+                shares.textContent = 'سهم: ' + parts.join(' · ');
+                li.appendChild(shares);
+            }
+            list.appendChild(li);
+        });
+    }
+
+    /* ------------------------------ ساخت خونه / شروع دوباره ------------------------------ */
+
+    $('#form-setup').addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        hideError($('#setup-error'));
+        var houseName = this.house_name.value.trim();
+        var memberNameIn = this.member_name.value.trim();
+        if (!houseName || !memberNameIn) {
+            showError($('#setup-error'), 'اسم خونه و اسم خودتان را وارد کنید.');
+            return;
+        }
+        state = {
+            house: { name: houseName, code: generateCode(), created_at: new Date().toISOString() },
+            members: [{ id: 1, name: memberNameIn, created_at: new Date().toISOString() }],
+            expenses: [],
+            seq: { member: 1, expense: 0 },
+            me_id: 1
+        };
+        saveState();
+        enterApp();
+    });
+
+    $('#btn-reset').addEventListener('click', function () {
+        if (!confirm('همه‌ی داده‌های این خونه از روی دستگاه پاک بشه؟')) return;
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+        state = null;
+        showView('setup');
+    });
+
+    /* ------------------------------ ثبت هزینه ------------------------------ */
+
+    $('#btn-open-add').addEventListener('click', function () {
+        buildExpenseForm();
+        showView('add');
+    });
+
+    $('#btn-add-back').addEventListener('click', function () { showView('home'); });
+
+    function buildExpenseForm() {
+        var payerSelect = $('#payer-select');
+        payerSelect.textContent = '';
+        state.members.forEach(function (m) {
+            var opt = document.createElement('option');
+            opt.value = m.id;
+            opt.textContent = m.name + (m.id === state.me_id ? ' (شما)' : '');
+            if (m.id === state.me_id) opt.selected = true;
+            payerSelect.appendChild(opt);
+        });
+
+        var weightsBox = $('#weights-list');
+        weightsBox.textContent = '';
+        state.members.forEach(function (m) {
+            var row = document.createElement('div');
+            row.className = 'weight-row';
+            var label = document.createElement('span');
+            label.className = 'weight-name';
+            label.textContent = m.name + (m.id === state.me_id ? ' (شما)' : '');
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.value = '1';
+            input.className = 'weight-input';
+            input.inputMode = 'numeric';
+            input.maxLength = 3;
+            input.dataset.memberId = m.id;
+            input.addEventListener('input', updateSplitPreview);
+            row.appendChild(label);
+            row.appendChild(input);
+            weightsBox.appendChild(row);
+        });
+
+        $('#form-expense').title.value = '';
+        $('#form-expense').amount.value = '';
+        hideError($('#expense-error'));
+        updateSplitPreview();
+    }
+
+    $('#form-expense').amount.addEventListener('input', function () {
+        var cleaned = toEnglishDigits(this.value).replace(/[^0-9]/g, '');
+        if (cleaned !== this.value) this.value = cleaned;
+        updateSplitPreview();
+    });
+
+    function currentWeights() {
+        var inputs = document.querySelectorAll('#weights-list .weight-input');
+        var out = [];
+        Array.prototype.forEach.call(inputs, function (input) {
+            var cleaned = toEnglishDigits(input.value).replace(/[^0-9]/g, '');
+            if (cleaned !== input.value) input.value = cleaned;
+            var w = parseInt(cleaned, 10);
+            if (!isFinite(w) || w < 0) w = 0;
+            out.push({ id: Number(input.dataset.memberId), weight: w });
+        });
+        return out;
+    }
+
+    function updateSplitPreview() {
+        var preview = $('#split-preview');
+        var amount = parseAmount($('#form-expense').amount.value);
+        if (!amount) {
+            preview.textContent = 'برای دیدن سهم هر نفر، مبلغ را وارد کنید.';
+            return;
+        }
+        var shares = splitAmount(amount, currentWeights());
+        if (!shares) {
+            preview.textContent = 'مجموع ضریب‌ها باید بیشتر از صفر باشد.';
+            return;
+        }
+        var byId = {};
+        shares.forEach(function (s) { byId[s.id] = s.share; });
+        preview.textContent = 'سهم هر نفر: ' + state.members.map(function (m) {
+            return m.name + ' ' + fmtNum(byId[m.id] || 0);
+        }).join(' · ');
+    }
+
+    $('#form-expense').addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        hideError($('#expense-error'));
+
+        var title = this.title.value.trim();
+        var amount = parseAmount(this.amount.value);
+        var payerId = Number(this.payer_member_id.value);
+        var weightsArr = currentWeights();
+        var weights = {};
+        weightsArr.forEach(function (w) { weights[w.id] = w.weight; });
+
+        if (!title) { showError($('#expense-error'), 'نام کالا را وارد کنید.'); return; }
+        if (!amount) { showError($('#expense-error'), 'مبلغ باید عدد صحیح مثبت (تومان) باشد.'); return; }
+
+        var shares = splitAmount(amount, weightsArr);
+        if (!shares) { showError($('#expense-error'), 'مجموع ضریب‌های سهم باید بیشتر از صفر باشد.'); return; }
+
+        var shareMap = {};
+        shares.forEach(function (s) { shareMap[s.id] = s.share; });
+
+        state.seq.expense += 1;
+        state.expenses.push({
+            id: state.seq.expense,
+            title: title,
+            amount: amount,
+            payer_id: payerId,
+            created_at: new Date().toISOString(),
+            weights: weights,
+            shares: shareMap
+        });
+        saveState();
+        renderBalancesStrip();
+        renderExpenseList();
+        showView('home');
+    });
+
+    /* ------------------------------ گزارش ------------------------------ */
+
+    $('#btn-open-report').addEventListener('click', function () {
+        renderReport();
+        showView('report');
+    });
+
+    $('#btn-report-back').addEventListener('click', function () { showView('home'); });
+
+    function renderReport() {
+        var balances = computeBalances();
+
+        var tbody = $('#report-balances');
+        tbody.textContent = '';
+        balances.forEach(function (b) {
+            var tr = document.createElement('tr');
+            [b.name, fmtNum(b.paid), fmtNum(b.share)].forEach(function (txt) {
+                var td = document.createElement('td');
+                td.textContent = txt;
+                tr.appendChild(td);
+            });
+            var tdBalance = document.createElement('td');
+            tdBalance.className = b.balance > 0 ? 'creditor' : b.balance < 0 ? 'debtor' : '';
+            tdBalance.textContent = fmtSigned(b.balance);
+            tr.appendChild(tdBalance);
+            tbody.appendChild(tr);
+        });
+
+        var ol = $('#settlement-list');
+        ol.textContent = '';
+        var settlement = suggestSettlement(balances);
+        $('#settlement-empty').hidden = settlement.length > 0;
+        settlement.forEach(function (t) {
+            var li = document.createElement('li');
+            li.textContent = memberName(t.from) + ' باید ' + fmtToman(t.amount) + ' به ' + memberName(t.to) + ' بدهد.';
+            ol.appendChild(li);
+        });
+    }
+
+    /* ------------------------------ پشتیبان‌گیری / بازگردانی ------------------------------ */
+
+    $('#btn-backup').addEventListener('click', exportBackup);
+
+    function exportBackup() {
+        var data = {
+            app: 'dangidongi-offline',
+            version: 1,
+            exported_at: new Date().toISOString(),
+            state: state
+        };
+        var json = JSON.stringify(data, null, 2);
+        var d = new Date();
+        function pad(x) { return (x < 10 ? '0' : '') + x; }
+        var filename = 'dangidongi-backup-' + d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + '.json';
+
+        // داخل اپ اندروید (WebView): ذخیره از طریق بریج جاوا
+        if (window.AndroidBackup && typeof window.AndroidBackup.saveBackup === 'function') {
+            var ok = false;
+            try { ok = AndroidBackup.saveBackup(json, filename); } catch (e) { ok = false; }
+            toast(ok ? 'فایل پشتیبان در پوشه‌ی دانلودهای اپ ذخیره شد.' : 'ذخیره‌سازی ممکن نشد.');
+            return;
+        }
+
+        // داخل مرورگر: دانلود عادی
+        var blob = new Blob([json], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
+        toast('فایل پشتیبان دانلود شد.');
+    }
+
+    $('#btn-restore').addEventListener('click', function () { $('#file-restore').click(); });
+    $('#btn-restore-setup').addEventListener('click', function () { $('#file-restore').click(); });
+
+    $('#file-restore').addEventListener('change', function () {
+        var f = this.files && this.files[0];
+        this.value = '';
+        if (!f) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+            try {
+                var obj = JSON.parse(reader.result);
+                var st = (obj && obj.state) ? obj.state : obj;
+                if (!st || !st.house || !Array.isArray(st.members) || !Array.isArray(st.expenses) || !st.seq) {
+                    throw new Error('bad');
+                }
+                if (!confirm('داده‌های فعلی با فایل پشتیبان جایگزین می‌شود. ادامه؟')) return;
+                state = st;
+                saveState();
+                enterApp();
+                toast('پشتیبان بازگردانی شد.');
+            } catch (e) {
+                toast('فایل پشتیبان معتبر نیست.');
+            }
+        };
+        reader.readAsText(f);
+    });
+
+    /* ------------------------------ همگام‌سازی بین تب‌ها (دسکتاپ) ------------------------------ */
+
+    window.addEventListener('storage', function (ev) {
+        if (ev.key === STORAGE_KEY) {
+            var fresh = loadState();
+            if (fresh && state) {
+                state = fresh;
+                renderHouseHeader();
+                renderMembers();
+                renderBalancesStrip();
+                renderExpenseList();
+            }
+        }
+    });
+
+    /* ------------------------------ سرویس‌ورکر (کارکرد آفلاین) ------------------------------ */
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(function () { /* ignore */ });
+    }
+
+    /* ------------------------------ شروع ------------------------------ */
+
+    function init() {
+        state = loadState();
+        if (state) enterApp();
+        else showView('setup');
+    }
+
+    init();
+})();
+</script>
+</body>
+</html>
