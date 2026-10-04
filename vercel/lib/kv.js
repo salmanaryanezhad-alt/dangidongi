@@ -6,7 +6,7 @@ const MEM = new Map();
 function cfg() {
     return {
         url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '',
-        token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || ''
+        token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '',
     };
 }
 
@@ -20,10 +20,10 @@ async function command(args) {
     const r = await fetch(url, {
         method: 'POST',
         headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ command: args })
+        body: JSON.stringify({ command: args }),
     });
     if (!r.ok) throw new Error('KV_HTTP_' + r.status);
     return r.json();
@@ -34,7 +34,7 @@ export async function kvGet(key) {
         return MEM.has(key) ? MEM.get(key) : null;
     }
     const j = await command(['get', key]);
-    return (j.result === undefined || j.result === null) ? null : j.result;
+    return j.result === undefined || j.result === null ? null : j.result;
 }
 
 export async function kvSet(key, value) {

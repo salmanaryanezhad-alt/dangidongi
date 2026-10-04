@@ -1,15 +1,13 @@
 /* ساخت خونه / ورود با کد دعوت — POST */
 
-import { json, err, readBody, genCode, genToken, kvErrorMessage } from './_lib.js';
-import { kvGet, kvSet } from './_kv.js';
+import { json, err, kvErrorMessage } from '../../lib/http';
+import { kvGet, kvSet } from '../../lib/kv';
+import { genCode, genToken } from '../../lib/ids';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') return err(res, 405, 'روش نامعتبر است.');
 
-    let input;
-    try { input = await readBody(req); }
-    catch (e) { return err(res, 400, 'ورودی معتبر نیست.'); }
-
+    const input = req.body || {};
     const action = String(input.action || '');
     const memberName = String(input.member_name || '').trim();
     if (!memberName || memberName.length > 50) {
@@ -29,7 +27,7 @@ export default async function handler(req, res) {
                 house: { name: houseName, code: code },
                 members: [{ id: 1, name: memberName }],
                 expenses: [],
-                seq: { member: 1, expense: 0 }
+                seq: { member: 1, expense: 0 },
             };
             await kvSet('h:' + code, JSON.stringify(state));
             await kvSet('t:' + token, JSON.stringify({ code: code, m: 1 }));
@@ -39,7 +37,7 @@ export default async function handler(req, res) {
                 code: code,
                 house_name: houseName,
                 member_id: 1,
-                member_name: memberName
+                member_name: memberName,
             });
         }
 
@@ -62,7 +60,7 @@ export default async function handler(req, res) {
                 code: code,
                 house_name: state.house.name,
                 member_id: id,
-                member_name: memberName
+                member_name: memberName,
             });
         }
 

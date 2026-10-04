@@ -1,7 +1,7 @@
 /* وضعیت کامل خونه برای رندر و همگام‌سازی — GET با توکن */
 
-import { json, err, getSession, tokenOf, kvErrorMessage } from './_lib.js';
-import { kvGet } from './_kv.js';
+import { json, err, getSession, tokenOf, kvErrorMessage } from '../../lib/http';
+import { kvGet } from '../../lib/kv';
 
 export default async function handler(req, res) {
     if (req.method !== 'GET') return err(res, 405, 'روش نامعتبر است.');
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
             rev: state.rev,
             house: state.house,
             members: state.members,
-            expenses: state.expenses
+            expenses: state.expenses,
         });
     } catch (e) {
         return err(res, 500, kvErrorMessage(e));

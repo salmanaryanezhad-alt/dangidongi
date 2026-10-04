@@ -1,7 +1,8 @@
 /* ثبت هزینه — POST با توکن */
 
-import { json, err, readBody, splitAmount, getSession, tokenOf, kvErrorMessage } from './_lib.js';
-import { kvGet, kvSet } from './_kv.js';
+import { json, err, getSession, tokenOf, kvErrorMessage } from '../../lib/http';
+import { kvGet, kvSet } from '../../lib/kv';
+import { splitAmount } from '../../lib/calc';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') return err(res, 405, 'روش نامعتبر است.');
@@ -10,10 +11,7 @@ export default async function handler(req, res) {
         const session = await getSession(tokenOf(req));
         if (!session) return err(res, 401, 'توکن معتبر نیست.');
 
-        let input;
-        try { input = await readBody(req); }
-        catch (e) { return err(res, 400, 'ورودی معتبر نیست.'); }
-
+        const input = req.body || {};
         const raw = await kvGet('h:' + session.code);
         if (!raw) return err(res, 404, 'خونه پیدا نشد.');
         const state = JSON.parse(raw);
@@ -58,7 +56,10 @@ export default async function handler(req, res) {
 
         const weightMap = {};
         const shareMap = {};
-        for (const s of shares) { weightMap[s.id] = s.weight; shareMap[s.id] = s.share; }
+        for (const s of shares) {
+            weightMap[s.id] = s.weight;
+            shareMap[s.id] = s.share;
+        }
 
         state.seq.expense += 1;
         state.expenses.push({
@@ -68,7 +69,7 @@ export default async function handler(req, res) {
             payer_id: payerId,
             created_at: new Date().toISOString(),
             weights: weightMap,
-            shares: shareMap
+            shares: shareMap,
         });
         state.rev += 1;
         await kvSet('h:' + session.code, JSON.stringify(state));
